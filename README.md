@@ -1,7 +1,7 @@
-# dsh-code-review
+# @dsh-plugin/dsh-code-review
 
 [![DSH Plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-4f7cff)](https://github.com/topics/dsh-plugin)
-[![License: GPL-3.0-only](https://img.shields.io/github/license/CooStack/dsh-code-review)](LICENSE)
+[![License: GPL-3.0-only](https://img.shields.io/github/license/dsh-plugins/dsh-code-review)](LICENSE)
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 <img width="2255" height="812" alt="image" src="https://github.com/user-attachments/assets/19f7bfd7-aef0-490d-87ac-d7a8321eb2d9" />
@@ -31,7 +31,7 @@ This is an independent community plugin. It is not an official DeepSeek product 
 The repository contains the prebuilt client bundle, so a GitHub source install is enough:
 
 ```bash
-dsh plugin --profile web add github:CooStack/dsh-code-review#main
+dsh plugin --profile web add github:dsh-plugins/dsh-code-review#main
 ```
 
 Restart the DSH Web profile after installation so the Host and Client plugin graph is rebuilt.
@@ -39,14 +39,14 @@ Restart the DSH Web profile after installation so the Host and Client plugin gra
 To install a local checkout while developing:
 
 ```bash
-git clone https://github.com/CooStack/dsh-code-review.git
+git clone https://github.com/dsh-plugins/dsh-code-review.git
 dsh plugin --profile web add file:./dsh-code-review
 ```
 
 The profile command forwards the package to the profile's package manager. To remove it:
 
 ```bash
-dsh plugin --profile web remove dsh-code-review
+dsh plugin --profile web remove @dsh-plugin/dsh-code-review
 ```
 
 ## Use
@@ -95,7 +95,7 @@ npm test
 npm run build
 ```
 
-`npm test` covers host-side aggregation and undo safety, client registration and layout behavior, and detailed highlighter token categories. `npm run build` regenerates `lib/client.bundle.js`, the bundle consumed by the DSH Web client.
+`npm test` covers host-side aggregation and undo safety, client registration and layout behavior, and detailed highlighter token categories. `npm run build` first compiles the TypeScript sources in `src/` to `lib/` (with `tsc`), then regenerates `lib/client.bundle.js` via esbuild — the bundle consumed by the DSH Web client.
 
 ## Scope and privacy
 

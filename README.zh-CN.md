@@ -1,7 +1,7 @@
-# dsh-code-review
+# @dsh-plugin/dsh-code-review
 
 [![DSH Plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-4f7cff)](https://github.com/topics/dsh-plugin)
-[![License: GPL-3.0-only](https://img.shields.io/github/license/CooStack/dsh-code-review)](LICENSE)
+[![License: GPL-3.0-only](https://img.shields.io/github/license/dsh-plugins/dsh-code-review)](LICENSE)
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
@@ -30,7 +30,7 @@
 仓库已经包含预构建的客户端 bundle，可以直接从 GitHub 源码安装：
 
 ```bash
-dsh plugin --profile web add github:CooStack/dsh-code-review#main
+dsh plugin --profile web add github:dsh-plugins/dsh-code-review#main
 ```
 
 安装后重启 DSH Web profile，使 Host 和 Client 插件图重新构建。
@@ -38,14 +38,14 @@ dsh plugin --profile web add github:CooStack/dsh-code-review#main
 开发本地 checkout 时，可以使用：
 
 ```bash
-git clone https://github.com/CooStack/dsh-code-review.git
+git clone https://github.com/dsh-plugins/dsh-code-review.git
 dsh plugin --profile web add file:./dsh-code-review
 ```
 
 profile 命令会把包转交给该 profile 使用的包管理器。卸载命令：
 
 ```bash
-dsh plugin --profile web remove dsh-code-review
+dsh plugin --profile web remove @dsh-plugin/dsh-code-review
 ```
 
 ## 使用
@@ -94,7 +94,7 @@ npm test
 npm run build
 ```
 
-`npm test` 覆盖 Host 侧变更聚合与撤销安全、Client 注册和布局行为，以及详细的高亮 token 类别。`npm run build` 会重新生成 DSH Web Client 使用的 `lib/client.bundle.js`。
+`npm test` 覆盖 Host 侧变更聚合与撤销安全、Client 注册和布局行为，以及详细的高亮 token 类别。`npm run build` 先用 `tsc` 把 `src/` 下的 TypeScript 源码编译到 `lib/`，再通过 esbuild 重新生成 DSH Web Client 使用的 `lib/client.bundle.js`。
 
 ## 范围与隐私
 

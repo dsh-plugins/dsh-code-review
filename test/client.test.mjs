@@ -153,7 +153,7 @@ test("client module registers the changes sidebar and completed-turn summary def
   };
 
   await import(`../lib/client.js?test=${Date.now()}`);
-  assert.equal(declaration.id, "dsh-code-review");
+  assert.equal(declaration.id, "@dsh-plugin/dsh-code-review");
 
   const React = createReactStub();
   const primitive = () => null;

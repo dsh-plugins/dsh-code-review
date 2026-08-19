@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 globalThis.window = globalThis;
-await import(`../src/highlighter.js?test=${Date.now()}`);
+await import(`../lib/highlighter.js?test=${Date.now()}`);
 
 const highlighter = globalThis.__DSH_CODE_REVIEW_HIGHLIGHTER__;
 

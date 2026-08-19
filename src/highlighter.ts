@@ -1,3 +1,11 @@
+/**
+ * Plugin-owned Shiki syntax highlighter for @dsh-plugin/dsh-code-review.
+ *
+ * Tokenizes complete old and new files before mapping tokens back to diff
+ * rows, so multiline comments and strings keep their grammar state. Runs in
+ * the browser and exposes itself on `window.__DSH_CODE_REVIEW_HIGHLIGHTER__`
+ * for the client module and the test harness.
+ */
 import { createHighlighterCoreSync } from "shiki/core";
 import { createJavaScriptRegexEngine, defaultJavaScriptRegexConstructor } from "shiki/engine/javascript";
 import langBash from "@shikijs/langs/shellscript";
@@ -25,7 +33,7 @@ import langTs from "@shikijs/langs/typescript";
 import langXml from "@shikijs/langs/xml";
 import langYaml from "@shikijs/langs/yaml";
 
-const theme = {
+const theme: Record<string, unknown> = {
   name: "dsh-code-review",
   type: "dark",
   colors: {
@@ -50,7 +58,7 @@ const theme = {
 
 const engine = createJavaScriptRegexEngine({
   forgiving: true,
-  regexConstructor: (pattern) => defaultJavaScriptRegexConstructor(pattern, { lazyCompileLength: Number.POSITIVE_INFINITY }),
+  regexConstructor: (pattern: string) => defaultJavaScriptRegexConstructor(pattern, { lazyCompileLength: Number.POSITIVE_INFINITY }),
 });
 
 const highlighter = createHighlighterCoreSync({
@@ -63,7 +71,7 @@ const highlighter = createHighlighterCoreSync({
   engine,
 });
 
-const extensions = new Map([
+const extensions = new Map<string, string>([
   ["js", "typescript"], ["jsx", "typescript"], ["ts", "typescript"], ["tsx", "typescript"],
   ["mjs", "typescript"], ["cjs", "typescript"], ["json", "json"], ["jsonc", "json"],
   ["sh", "shellscript"], ["bash", "shellscript"], ["zsh", "shellscript"],
@@ -75,7 +83,7 @@ const extensions = new Map([
   ["css", "css"], ["scss", "scss"], ["sql", "sql"], ["xml", "xml"], ["lua", "lua"],
 ]);
 
-function languageFromPath(path) {
+function languageFromPath(path: string | null | undefined): string | undefined {
   const normalized = String(path ?? "").replace(/\\/g, "/");
   const name = normalized.slice(normalized.lastIndexOf("/") + 1).toLowerCase();
   if (name === "dockerfile" || name === "makefile") return "shellscript";
@@ -83,16 +91,33 @@ function languageFromPath(path) {
   return dot < 0 ? undefined : extensions.get(name.slice(dot + 1));
 }
 
-function highlightLines(code, lang) {
+interface Token {
+  text: string;
+  color: string;
+}
+
+function highlightLines(code: string, lang: string | undefined): Token[][] | undefined {
   if (typeof code !== "string" || lang === undefined) return undefined;
   try {
-    const { tokens } = highlighter.codeToTokens(code, { lang, theme: theme.name, tokenizeTimeLimit: 3000 });
+    const { tokens } = highlighter.codeToTokens(code, { lang, theme: theme.name as string, tokenizeTimeLimit: 3000 });
     const last = tokens[tokens.length - 1];
-    const lines = tokens.length > 1 && last?.length === 0 ? tokens.slice(0, -1) : tokens;
-    return lines.map((line) => line.map((token) => ({ text: token.content, color: token.color })));
+    const lines = (tokens.length > 1 && last?.length === 0 ? tokens.slice(0, -1) : tokens).map((line) =>
+      line
+        .map((token) => ({ text: token.content, color: token.color }))
+        .filter((token): token is Token => token.color !== undefined && token.color !== ""),
+    );
+    return lines;
   } catch {
     return undefined;
   }
 }
 
-window.__DSH_CODE_REVIEW_HIGHLIGHTER__ = Object.freeze({ highlightLines, languageFromPath });
+interface HighlighterApi {
+  highlightLines(code: string, lang: string | undefined): Token[][] | undefined;
+  languageFromPath(path: string | null | undefined): string | undefined;
+}
+
+(window as unknown as Record<string, unknown>).__DSH_CODE_REVIEW_HIGHLIGHTER__ = Object.freeze({
+  highlightLines,
+  languageFromPath,
+} satisfies HighlighterApi);
