@@ -5,6 +5,13 @@
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsh-plugins/dsh-code-review.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
@@ -36,6 +43,7 @@
   "scripts": {
     "build:client": "node scripts/build-client.mjs",
     "build": "tsc -p tsconfig.json && npm run build:client",
+    "prepack": "npm run build",
     "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
