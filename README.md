@@ -1,12 +1,19 @@
+<div align="center">
+
+![Banner](./docs/banner.png)
+
 # @dsh-plugin/dsh-code-review
 
+**A community DeepSeek Harness Web plugin for reviewing code changes turn by turn — Codex-style change summary, resizable diff sidebar, workspace-relative file tree, syntax highlighting, and guarded undo.**
+
+[English](README.md) | [简体中文](README.zh_CN.md)
+
 [![DSH Plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-4f7cff)](https://github.com/topics/dsh-plugin)
-[![License: GPL-3.0-only](https://img.shields.io/github/license/dsh-plugins/dsh-code-review)](LICENSE)
 [![Build Status](https://github.com/dsh-plugins/dsh-code-review/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/dsh-plugins/dsh-code-review/actions/workflows/npm-publish.yml)
 [![Version](https://img.shields.io/npm/v/@dsh-plugin/dsh-code-review.svg?sanitize=true)](https://www.npmjs.com/package/@dsh-plugin/dsh-code-review)
+[![License: GPL-3.0-only](https://img.shields.io/github/license/dsh-plugins/dsh-code-review)](LICENSE)
 
-[English](README.md) | [简体中文](README.zh-CN.md)
-<img width="2255" height="812" alt="image" src="https://github.com/user-attachments/assets/19f7bfd7-aef0-490d-87ac-d7a8321eb2d9" />
+</div>
 
 A community DeepSeek Harness Web plugin for reviewing code changes turn by turn. It adds a Codex-style change summary, a resizable diff sidebar, a workspace-relative file tree, syntax highlighting, and guarded undo for safe iteration in a shared workspace.
 
