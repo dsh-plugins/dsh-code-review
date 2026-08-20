@@ -60,6 +60,7 @@ window.__ModuleLoader__.load({
     const SIDEBAR_WIDTH_STORAGE_KEY = "dsh-code-review/sidebar-width";
     const DEFAULT_FONT_FAMILY = "Microsoft YaHei";
     const DEFAULT_SIDEBAR_WIDTH = 720;
+    const MIN_SIDEBAR_WIDTH = 8;
     const FILE_PANE_WIDTH_STORAGE_KEY = "dsh-code-review/file-pane-width";
     const DEFAULT_FILE_PANE_WIDTH = 260;
     const HIGHLIGHT_STORAGE_KEY = "dsh-code-review/theme-colors/v1";
@@ -1138,7 +1139,10 @@ window.__ModuleLoader__.load({
 
     function sidebarWidthFromPointer(frameRight, leftBoundary, pointerX) {
       const available = Math.max(0, frameRight - leftBoundary);
-      return Math.max(0, Math.min(available, frameRight - pointerX));
+      return Math.max(
+        MIN_SIDEBAR_WIDTH,
+        Math.min(available, frameRight - pointerX),
+      );
     }
 
     function readFilePaneWidthPreference() {
@@ -1221,9 +1225,12 @@ window.__ModuleLoader__.load({
           ensureConversationSpace(sessionId);
         },
         resize(width) {
-          if (!Number.isFinite(width) || width < 0) return;
-          publish({ ...snapshot, width });
-          writeSidebarWidthPreference(width);
+          if (!Number.isFinite(width)) return;
+          publish({
+            ...snapshot,
+            width: Math.max(MIN_SIDEBAR_WIDTH, width),
+          });
+          writeSidebarWidthPreference(Math.max(MIN_SIDEBAR_WIDTH, width));
         },
         close() {
           if (snapshot.sessionId === null) return;
@@ -2484,9 +2491,10 @@ window.__ModuleLoader__.load({
           },
           onPointerCancel: () => setDragging(false),
           onKeyDown: (event) => {
-            if (event.key === "ArrowLeft") sidebarController.resize(width + 40);
+            if (event.key === "ArrowLeft")
+              sidebarController.resize(width + 40);
             else if (event.key === "ArrowRight")
-              sidebarController.resize(Math.max(0, width - 40));
+              sidebarController.resize(Math.max(MIN_SIDEBAR_WIDTH, width - 40));
             else return;
             event.preventDefault();
           },

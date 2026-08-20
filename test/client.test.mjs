@@ -230,6 +230,11 @@ test("client module registers the changes sidebar and completed-turn summary def
     "only the physical frame boundary limits dragging",
   );
   assert.equal(
+    plugin.sidebarWidthFromPointer(1440, 56, 1440),
+    8,
+    "collapsed sidebar must keep its resize handle draggable",
+  );
+  assert.equal(
     plugin.filePaneWidthFromPointer(200, 1000, 420),
     580,
     "inner divider follows the pointer",
